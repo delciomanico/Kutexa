@@ -8,7 +8,7 @@
 */
 
 //importacao de rotas por modulos
-import '../app/modules/extrair_texto/routes.js'
+import '../app/modules/reconciliar/routes.js'
 
 import router from '@adonisjs/core/services/router'
 import AutoSwagger from 'adonis-autoswagger';

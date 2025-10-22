@@ -93,7 +93,6 @@ ${texto}
     const resposta = await askLLM(prompt)
 
     const dados = JSON.parse(resposta)
-    console.log('Dados extraídos do extrato:', dados)
     return {
       ...dados,
       origemArquivo,
@@ -150,6 +149,7 @@ export async function lerExtrato(caminho: string): Promise<TransacaoExtrato[]> {
     const parser = new PDFParse({ url: caminho });
 
     const result = await parser.getText();
+     console.log('Dados extraídos do extrato:', result.text);
     const texto = result?.text ?? ''
     const prompt = `
 Você é um extrator de dados inteligente. Abaixo está o conteúdo de um extrato ou documento financeiro. Extraia todas as transações com os seguintes campos:
