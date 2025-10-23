@@ -6,36 +6,43 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 export default class ReconciliacaoTabela extends BaseModel {
   public static table = 'reconciliacoes_tabela'
 
-  @column({ isPrimary: true })
-  public declare id: number
+  @column({ isPrimary: true, columnName: 'id' })
+  public id!: number
 
-  @column()
-  public declare historicoId: number
+  // mapeamento para colunas snake_case na DB
+  @column({ columnName: 'historico_id' })
+  public historicoId!: number | null
 
-  @column()
-  public declare faturaArquivo: string
+  @column({ columnName: 'fatura_arquivo' })
+  public faturaArquivo!: string
 
-  @column()
-  public declare faturaNome: string
+  @column({ columnName: 'fatura_nome' })
+  public faturaNome!: string
 
-  @column.date()
-  public declare faturaData: DateTime
+  @column.dateTime({ columnName: 'fatura_data' })
+  public faturaData!: DateTime | null
 
-  @column()
-  public declare faturaValor: number
+  @column({ columnName: 'fatura_valor' })
+  public faturaValor!: number | null
 
-  @column()
-  public declare transacaoDescricao: string | null
+  @column({ columnName: 'transacao_descricao' })
+  public transacaoDescricao!: string | null
 
-  @column.date()
-  public declare transacaoData: DateTime | null
+  @column.dateTime({ columnName: 'transacao_data' })
+  public transacaoData!: DateTime | null
 
-  @column()
-  public declare transacaoValor: number | null
+  @column({ columnName: 'transacao_valor' })
+  public transacaoValor!: number | null
 
-  @column()
-  public declare similaridade: number
+  @column({ columnName: 'similaridade' })
+  public similaridade!: number
 
-  @belongsTo(() => HistoricoReconciliacao)
-  public declare historico: BelongsTo<typeof HistoricoReconciliacao>
+  @belongsTo(() => HistoricoReconciliacao, { foreignKey: 'historico_id' })
+  public historico!: BelongsTo<typeof HistoricoReconciliacao>
+
+  @column.dateTime({ autoCreate: true, columnName: 'created_at' })
+  public createdAt!: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true, columnName: 'updated_at' })
+  public updatedAt!: DateTime
 }

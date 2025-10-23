@@ -9,11 +9,26 @@
 
 import router from '@adonisjs/core/services/router'
 import ReconciliacaoController from './controllers/reconciliacao_controller.js';
-//const ExtrairController = () => import('./controllers/extrair_controller.js');
 
 
 router.group(()=> {
-  //router.post('/extrair-texto', [ExtrairController,'extractText']);
   router.post('reconciliar', [ReconciliacaoController,'reconciliar'])
-  
 }).prefix('api/')
+
+router.group(() => {
+  router.get('/historicos', '#controllers/historicos_reconciliacoes_controller.index')
+  router.get('/historicos/:id', '#controllers/historicos_reconciliacoes_controller.show')
+  router.delete('/historicos/:id', '#controllers/historicos_reconciliacoes_controller.destroy')
+
+  router.get('/fatura', '#controllers/fatura_sem_correspondencia_controller.index')
+  router.get('/fatura/:id', '#controllers/fatura_sem_correspondencia_controller.show')
+  router.delete('/fatura/:id', '#controllers/fatura_sem_correspondencia_controller.destroy')
+
+  router.get('/transacao', '#controllers/transacao_sem_correspondencia_controller.index')
+  router.get('/transacao/:id', '#controllers/transacao_sem_correspondencia_controller.show')
+  router.delete('/transacao/:id', '#controllers/transacao_sem_correspondencia_controller.destroy')
+
+  router.get('/reconciliacao', '#controllers/historicos_reconciliacoes_controller.index')
+  router.get('/reconciliacao/:id', '#controllers/historicos_reconciliacoes_controller.show')
+  router.delete('/reconciliacao/:id', '#controllers/historicos_reconciliacoes_controller.destroy')
+}).prefix('/api')

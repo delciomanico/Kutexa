@@ -1,11 +1,8 @@
 import * as Tesseract from 'tesseract.js'
-import * as fs from 'fs'
-import * as csv from 'fast-csv'
 import * as path from 'path'
 // importar a função pdfParse (conforme documentação)
 import { PDFParse } from 'pdf-parse';
 import { askLLM } from './llmClient.js'
-import { Console } from 'console'
 
 export interface MetadadoFatura {
   id?: string;
@@ -225,7 +222,6 @@ export function reconciliar(
   faturas: MetadadoFatura[],
   extrato: TransacaoExtrato[],
   pesos: PesosSimilaridade = { data: 40, valor: 40, fornecedor: 20 },
-  limiarSimilaridade = 50
 ): Correspondencia[] {
   const correspondencias: Correspondencia[] = []
   const transacoesDisponiveis = [...extrato]

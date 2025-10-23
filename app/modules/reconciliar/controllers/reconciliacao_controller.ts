@@ -130,7 +130,7 @@ export default class ReconciliacaoController {
         transacoesSemCorrespondencia: transacoesSemCorrespondencia.length,
       })
 
-      // salvar tabela de reconciliação
+      /* salvar tabela de reconciliação
       await ReconciliacaoTabela.createMany(
         resultado.map((r) => ({
           historicoId: historico.id,
@@ -170,10 +170,7 @@ export default class ReconciliacaoController {
           data: t.data ? DateTime.fromISO(t.data) : null,
           valor: t.valor ?? null,
         }))
-      )
-
-
-
+      )*/
 
       // Retornar resposta estruturada
       return response.ok({

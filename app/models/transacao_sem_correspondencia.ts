@@ -6,24 +6,30 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 export default class TransacaoSemCorrespondencia extends BaseModel {
   public static table = 'transacoes_sem_correspondencia'
 
-  @column({ isPrimary: true })
-  public declare id: number
+  @column({ isPrimary: true, columnName: 'id' })
+  public id!: number
 
-  @column()
-  public declare historicoId: number
+  @column({ columnName: 'historico_id' })
+  public historicoId!: number | null
 
-  @column()
-  public declare origem: string | null
+  @column({ columnName: 'origem' })
+  public origem!: string | null
 
-  @column()
-  public declare descricao: string | null
+  @column({ columnName: 'descricao' })
+  public descricao!: string | null
 
-  @column.date()
-  public declare data: DateTime | null
+  @column.dateTime({ columnName: 'data' })
+  public data!: DateTime | null
 
-  @column()
-  public declare valor: number | null
+  @column({ columnName: 'valor' })
+  public valor!: number | null
 
-  @belongsTo(() => HistoricoReconciliacao)
-  public declare historico: BelongsTo<typeof HistoricoReconciliacao>
+  @belongsTo(() => HistoricoReconciliacao, { foreignKey: 'historico_id' })
+  public historico!: BelongsTo<typeof HistoricoReconciliacao>
+
+  @column.dateTime({ autoCreate: true, columnName: 'created_at' })
+  public createdAt!: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true, columnName: 'updated_at' })
+  public updatedAt!: DateTime
 }

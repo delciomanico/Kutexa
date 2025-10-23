@@ -12,6 +12,7 @@ export default class HistoricosReconciliacoes extends BaseSchema {
       table.integer('nao_reconciliadas')
       table.integer('transacoes_sem_correspondencia')
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
+      table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })
   }
 
