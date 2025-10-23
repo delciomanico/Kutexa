@@ -149,8 +149,8 @@ export async function lerExtrato(caminho: string): Promise<TransacaoExtrato[]> {
     const parser = new PDFParse({ url: caminho });
 
     const result = await parser.getText();
-     console.log('Dados extraídos do extrato:', result.text);
     const texto = result?.text ?? ''
+    console.log('Texto extraído do extrato:', texto)
     const prompt = `
 Você é um extrator de dados inteligente. Abaixo está o conteúdo de um extrato ou documento financeiro. Extraia todas as transações com os seguintes campos:
 
@@ -189,6 +189,8 @@ ${texto}
     let transacoes: TransacaoExtrato[]
     try {
       const resposta = await withTimeout(askLLM(prompt), TIMEOUT_MS)
+
+      //console.log('Resposta da IA para extrato:', resposta)
       transacoes = JSON.parse(resposta)
 
       if (!Array.isArray(transacoes)) throw new Error('Resposta da IA não é um array')

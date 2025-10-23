@@ -1,5 +1,9 @@
 import type { HttpContext } from '@Adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
+import HistoricoReconciliacao from '#models/historico_reconciliacao'
+import ReconciliacaoTabela from '#models/reconciliacao_tabela'
+import FaturaSemCorrespondencia from '#models/fatura_sem_correspondencia'
+import TransacaoSemCorrespondencia from '#models/transacao_sem_correspondencia'
 import {
   extrairTextoOCR,
   extrairMetadados,
@@ -10,6 +14,7 @@ import {
 } from '../../../Services/Reconciliacao.js'
 import fs from 'fs'
 import path from 'path'
+import { DateTime } from 'luxon'
 
 export default class ReconciliacaoController {
   public async reconciliar({ request, response }: HttpContext) {
@@ -20,13 +25,13 @@ export default class ReconciliacaoController {
       const faturaFiles = Array.isArray(faturaFilesInput)
         ? faturaFilesInput
         : faturaFilesInput
-        ? [faturaFilesInput]
-        : []
+          ? [faturaFilesInput]
+          : []
       const extratoFiles = Array.isArray(extratoFilesInput)
         ? extratoFilesInput
         : extratoFilesInput
-        ? [extratoFilesInput]
-        : []
+          ? [extratoFilesInput]
+          : []
 
       if (extratoFiles.length === 0 || faturaFiles.length === 0) {
         return response.badRequest({ error: 'Envie pelo menos uma fatura e um extrato bancário.' })
@@ -115,6 +120,60 @@ export default class ReconciliacaoController {
           valor: t.valor ?? null,
           descricao: t.descricao ?? null,
         }))
+
+      // salvar resumo
+      const historico = await HistoricoReconciliacao.create({
+        totalFaturas: faturas.length,
+        totalTransacoes: transacoes.length,
+        correspondencias: resultado.filter((r) => r.transacao && (r.similaridade ?? 0) >= LIMIAR_SIMILARIDADE).length,
+        naoReconciliadas: faturasSemCorrespondencia.length,
+        transacoesSemCorrespondencia: transacoesSemCorrespondencia.length,
+      })
+
+      // salvar tabela de reconciliação
+      await ReconciliacaoTabela.createMany(
+        resultado.map((r) => ({
+          historicoId: historico.id,
+          faturaArquivo: r.fatura.origemArquivo ?? '',
+          faturaNome: r.fatura.fornecedor ?? '',
+          faturaData: r.fatura.data ? DateTime.fromISO(r.fatura.data) : DateTime.now(),
+          faturaValor: r.fatura.valorTotal ?? 0,
+          transacaoDescricao: r.transacao?.origem ?? null,
+          transacaoData: r.transacao?.data ? DateTime.fromISO(r.transacao.data) : null,
+          transacaoValor: r.transacao?.valor ?? null,
+          similaridade: r.similaridade ?? 0,
+        }))
+      )
+
+
+
+      // salvar faturas sem correspondência
+      await FaturaSemCorrespondencia.createMany(
+        faturasSemCorrespondencia.map((f) => ({
+          historicoId: historico.id,
+          arquivo: f.arquivo ?? '',
+          nome: f.nome ?? '',
+          data: f.data ? DateTime.fromISO(f.data) : DateTime.now(),
+          valor: f.valor ?? 0,
+          similaridade: f.similaridade ?? 0,
+        }))
+      )
+
+
+
+      // salvar transações sem correspondência
+      await TransacaoSemCorrespondencia.createMany(
+        transacoesSemCorrespondencia.map((t) => ({
+          historicoId: historico.id,
+          origem: t.origem ?? null,
+          descricao: t.descricao ?? null,
+          data: t.data ? DateTime.fromISO(t.data) : null,
+          valor: t.valor ?? null,
+        }))
+      )
+
+
+
 
       // Retornar resposta estruturada
       return response.ok({
