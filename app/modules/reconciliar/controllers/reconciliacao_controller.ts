@@ -130,16 +130,16 @@ export default class ReconciliacaoController {
         transacoesSemCorrespondencia: transacoesSemCorrespondencia.length,
       })
 
-      /* salvar tabela de reconciliação
+      // salvar tabela de reconciliação
       await ReconciliacaoTabela.createMany(
         resultado.map((r) => ({
           historicoId: historico.id,
           faturaArquivo: r.fatura.origemArquivo ?? '',
           faturaNome: r.fatura.fornecedor ?? '',
-          faturaData: r.fatura.data ? DateTime.fromISO(r.fatura.data) : DateTime.now(),
+          faturaData: r.fatura.data ,
           faturaValor: r.fatura.valorTotal ?? 0,
           transacaoDescricao: r.transacao?.origem ?? null,
-          transacaoData: r.transacao?.data ? DateTime.fromISO(r.transacao.data) : null,
+          transacaoData: r.transacao?.data,
           transacaoValor: r.transacao?.valor ?? null,
           similaridade: r.similaridade ?? 0,
         }))
@@ -147,13 +147,13 @@ export default class ReconciliacaoController {
 
 
 
-      // salvar faturas sem correspondência
+       //salvar faturas sem correspondência
       await FaturaSemCorrespondencia.createMany(
         faturasSemCorrespondencia.map((f) => ({
           historicoId: historico.id,
           arquivo: f.arquivo ?? '',
           nome: f.nome ?? '',
-          data: f.data ? DateTime.fromISO(f.data) : DateTime.now(),
+          data: f.data ,
           valor: f.valor ?? 0,
           similaridade: f.similaridade ?? 0,
         }))
@@ -167,10 +167,10 @@ export default class ReconciliacaoController {
           historicoId: historico.id,
           origem: t.origem ?? null,
           descricao: t.descricao ?? null,
-          data: t.data ? DateTime.fromISO(t.data) : null,
+          data: t.data ,
           valor: t.valor ?? null,
         }))
-      )*/
+      )
 
       // Retornar resposta estruturada
       return response.ok({

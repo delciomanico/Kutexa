@@ -9,7 +9,7 @@ export default class FaturasSemCorrespondencia extends BaseSchema {
       table.integer('historico_id').unsigned().references('id').inTable('historicos_reconciliacoes').onDelete('CASCADE')
       table.string('arquivo')
       table.string('nome')
-      table.date('data')
+      table.string('data')
       table.decimal('valor', 12, 2)
       table.integer('similaridade')
       table.timestamps(true)

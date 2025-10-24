@@ -18,8 +18,8 @@ export default class FaturaSemCorrespondencia extends BaseModel {
   @column({ columnName: 'nome' })
   public nome!: string
 
-  @column.dateTime({ columnName: 'data' })
-  public data!: DateTime | null
+  @column({ columnName: 'data' })
+  public data!: string | null
 
   @column({ columnName: 'valor' })
   public valor!: number | null

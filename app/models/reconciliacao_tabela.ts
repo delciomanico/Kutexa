@@ -28,8 +28,8 @@ export default class ReconciliacaoTabela extends BaseModel {
   @column({ columnName: 'transacao_descricao' })
   public transacaoDescricao!: string | null
 
-  @column.dateTime({ columnName: 'transacao_data' })
-  public transacaoData!: DateTime | null
+  @column({ columnName: 'transacao_data' })
+  public transacaoData!: string | null
 
   @column({ columnName: 'transacao_valor' })
   public transacaoValor!: number | null

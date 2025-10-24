@@ -18,8 +18,8 @@ export default class TransacaoSemCorrespondencia extends BaseModel {
   @column({ columnName: 'descricao' })
   public descricao!: string | null
 
-  @column.dateTime({ columnName: 'data' })
-  public data!: DateTime | null
+  @column({ columnName: 'data' })
+  public data!: string | null
 
   @column({ columnName: 'valor' })
   public valor!: number | null

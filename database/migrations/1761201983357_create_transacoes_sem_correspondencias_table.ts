@@ -9,7 +9,7 @@ export default class TransacoesSemCorrespondencia extends BaseSchema {
       table.integer('historico_id').unsigned().references('id').inTable('historicos_reconciliacoes').onDelete('CASCADE')
       table.string('origem').nullable()
       table.string('descricao').nullable()
-      table.date('data').nullable()
+      table.string('data').nullable()
       table.decimal('valor', 12, 2).nullable()
       table.timestamps(true)
     })
