@@ -9,10 +9,15 @@
 
 import router from '@adonisjs/core/services/router'
 import ReconciliacaoController from './controllers/reconciliacao_controller.js';
+import OdooController from '#controllers/OdooController';
 
 
 router.group(()=> {
   router.post('reconciliar', [ReconciliacaoController,'reconciliar'])
+  // start/routes.ts
+    router.get('/odoo/faturas', [OdooController, 'faturas'])
+    router.get('/odoo/vendas', [OdooController, 'vendas'])
+
 }).prefix('api/')
 
 router.group(() => {
