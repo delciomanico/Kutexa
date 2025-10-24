@@ -13,12 +13,12 @@ import OdooController from '#controllers/OdooController';
 
 
 router.group(()=> {
-  router.post('reconciliar', [ReconciliacaoController,'reconciliar'])
+  router.post('/reconciliar', [ReconciliacaoController,'reconciliar'])
   // start/routes.ts
     router.get('/odoo/faturas', [OdooController, 'faturas'])
     router.get('/odoo/vendas', [OdooController, 'vendas'])
 
-}).prefix('api/')
+}).prefix('/api')
 
 router.group(() => {
   router.get('/historicos', '#controllers/historicos_reconciliacoes_controller.index')
